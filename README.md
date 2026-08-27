@@ -1,5 +1,8 @@
 ## Petpooja
 
+<img width="1920" height="1080" alt="Petpooja POS" src="https://github.com/user-attachments/assets/248229c7-b8f6-4904-bc43-7290910a7e74" />
+
+
 A Frappe/ERPNext app that integrates **PetPooja POS** with **ERPNext**, automatically converting PetPooja orders — from in-store POS, Zomato, and Swiggy — into Sales Invoices in real time. Built for multi-outlet restaurant chains that want a single financial source of truth without manual reconciliation between the POS and the back office.
 
 Read the full story behind this integration: [POS to ERP: Connecting the dots with Pet Pooja and ERPNext](https://greycube.in/blog/integration/pos-to-erp-connecting-the-dots-with-pet-pooja-and-erpnext)
