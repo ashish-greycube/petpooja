@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-01-02 09:55:15.978030",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_endpoints",
+  "enable",
+  "creation_user",
+  "secret",
+  "view_webhook_config",
+  "invoice_defaults_tab",
+  "customer_defaults_section",
+  "default_swiggy_customer",
+  "column_break_kjeh",
+  "default_zomato_customer",
+  "general_defaults_tab",
+  "place_of_supply",
+  "pp_vs_erpnext_mode_of_payment_mapping"
+ ],
+ "fields": [
+  {
+   "fieldname": "view_webhook_config",
+   "fieldtype": "Button",
+   "label": "View PetPooja Webhook Configuration"
+  },
+  {
+   "fieldname": "section_break_endpoints",
+   "fieldtype": "Section Break",
+   "label": "Endpoints"
+  },
+  {
+   "fieldname": "secret",
+   "fieldtype": "Code",
+   "hidden": 1,
+   "label": "Secret",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "enable",
+   "fieldtype": "Check",
+   "label": "Enable"
+  },
+  {
+   "description": "The user that will be used to create Customers, Items and Sales Orders. This user should have the relevant permissions.",
+   "fieldname": "creation_user",
+   "fieldtype": "Link",
+   "label": "Creation User",
+   "options": "User"
+  },
+  {
+   "fieldname": "default_swiggy_customer",
+   "fieldtype": "Link",
+   "label": "Default Swiggy Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "default_zomato_customer",
+   "fieldtype": "Link",
+   "label": "Default Zomato Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "invoice_defaults_tab",
+   "fieldtype": "Tab Break",
+   "label": "Invoice Defaults"
+  },
+  {
+   "fieldname": "customer_defaults_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Defaults"
+  },
+  {
+   "fieldname": "column_break_kjeh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "general_defaults_tab",
+   "fieldtype": "Tab Break",
+   "label": "General Defaults"
+  },
+  {
+   "default": "24-Gujarat",
+   "fieldname": "place_of_supply",
+   "fieldtype": "Data",
+   "label": "Place of Supply"
+  },
+  {
+   "description": "Note:<b>Applicable only if Mode of Payment is received combined for all the outlets<b></b></b>",
+   "fieldname": "pp_vs_erpnext_mode_of_payment_mapping",
+   "fieldtype": "Table",
+   "label": "PP vs ERPNext Mode of Payment Mapping",
+   "options": "PP vs ERPNext Mode of Payment Mapping"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-01-28 10:19:37.322465",
+ "modified_by": "Administrator",
+ "module": "Petpooja",
+ "name": "Petpooja Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

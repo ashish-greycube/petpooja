@@ -1,0 +1,226 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2024-12-29 10:06:21.676166",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "user",
+  "params",
+  "log_status",
+  "time_elapsed",
+  "data",
+  "column_break_tkth5",
+  "url",
+  "method",
+  "endpoint",
+  "response",
+  "error",
+  "section_break_ujda",
+  "branch",
+  "rest_id",
+  "order_id",
+  "column_break_ntuc",
+  "pos_created_on",
+  "business_date",
+  "section_break_hmdh",
+  "invoice_status",
+  "invoice_error",
+  "column_break_dfka",
+  "invoice_id",
+  "traceback"
+ ],
+ "fields": [
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "params",
+   "fieldtype": "Code",
+   "label": "Parameters",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_elapsed",
+   "fieldtype": "Duration",
+   "label": "Time Elapsed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "data",
+   "fieldtype": "Code",
+   "label": "Data",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "traceback",
+   "fieldtype": "Code",
+   "label": "Traceback",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tkth5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "url",
+   "fieldtype": "Long Text",
+   "label": "URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "method",
+   "fieldtype": "Data",
+   "label": "Method",
+   "read_only": 1
+  },
+  {
+   "fieldname": "endpoint",
+   "fieldtype": "Data",
+   "label": "Endpoint",
+   "read_only": 1
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Code",
+   "label": "Response",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error",
+   "fieldtype": "Text",
+   "label": "Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "log_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Log Status",
+   "options": "Success\nError",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_hmdh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Not processed",
+   "fieldname": "invoice_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Invoice Status",
+   "no_copy": 1,
+   "options": "Not processed\nCreated\nCancelled\nDuplicate\nError"
+  },
+  {
+   "fieldname": "invoice_error",
+   "fieldtype": "Code",
+   "label": "Invoice Error",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "invoice_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Erpnext Sales Invoice ID",
+   "no_copy": 1,
+   "options": "URL"
+  },
+  {
+   "fieldname": "column_break_dfka",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ujda",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "order_id",
+   "fieldtype": "Data",
+   "label": "Order ID"
+  },
+  {
+   "fieldname": "column_break_ntuc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pos_created_on",
+   "fieldtype": "Datetime",
+   "label": "POS Created On"
+  },
+  {
+   "description": "business date is previous date when 'POS Created On' is between 12 to 4:30 AM",
+   "fieldname": "business_date",
+   "fieldtype": "Date",
+   "label": "Business Date"
+  },
+  {
+   "fieldname": "rest_id",
+   "fieldtype": "Data",
+   "label": "Rest ID"
+  }
+ ],
+ "in_create": 1,
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_pet_pooja_log_id"
+  }
+ ],
+ "modified": "2025-03-06 11:45:23.703626",
+ "modified_by": "Administrator",
+ "module": "Petpooja",
+ "name": "Pet Pooja Log",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
