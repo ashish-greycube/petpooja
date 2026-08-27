@@ -38,36 +38,37 @@ def get_columns(filters):
 	return columns
 
 def get_conditions(filters):
-	conditions =""
+    conditions = []
 
-	if filters.get("from_date") and filters.get("to_date"):
-		if filters.get("to_date") >= filters.get("from_date"):
-			conditions += "DATE(ppl.business_date) between {0} and {1}".format(
-				frappe.db.escape(filters.get("from_date")),
-				frappe.db.escape(filters.get("to_date")))		
-		else:
-			frappe.throw(_("To Date should be greater then From Date"))
+    if filters.get("from_date") and filters.get("to_date"):
+        if filters.get("to_date") >= filters.get("from_date"):
+            conditions.append("DATE(ppl.business_date) BETWEEN %(from_date)s AND %(to_date)s")
+        else:
+            frappe.throw(_("To Date should be greater than From Date"))
 
-	if filters.branch:
-		conditions += " and ppl.branch = '{0}'".format(filters.branch)
-	
-	return conditions
+    if filters.get("branch"):
+        conditions.append("ppl.branch = %(branch)s")
+    
+    return " WHERE " + " AND ".join(conditions) if conditions else ""
 
 def get_data(filters, columns):
-	data = []
+    conditions = get_conditions(filters)
+    
+    data = frappe.db.sql(
+        f"""
+        SELECT
+            ppl.branch AS branch, 
+            ppl.business_date AS business_date, 
+            ppl.invoice_status AS invoice_status, 
+            1 AS count_log
+        FROM `tabPet Pooja Log` AS ppl
+        {conditions}
+        """,
+        filters,
+        as_dict=1
+    )
 
-	conditions = get_conditions(filters)
-	data = frappe.db.sql(
-		"""SELECT
-		ppl.branch as branch, ppl.business_date as business_date, ppl.invoice_status as invoice_status, 1 as count_log
-		From `tabPet Pooja Log` as ppl
-		Where {0}""".format(conditions),filters,as_dict=1,debug=1)
-
-	result = make_report(data, filters, columns)
-	# print(result)
-
-	return result
-
+    return make_report(data, filters, columns)
 
 
 def make_report(data, filters, columns):

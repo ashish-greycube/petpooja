@@ -71,7 +71,6 @@ def create_sales_invoice(docname):
 					if pl.customer == cost_center_doc.custom_default_b2c_customer:
 						if pl.price_list:
 							pl_found = True
-							print(pl.price_list,"Price list")
 							sales_invoice_doc.selling_price_list = pl.price_list
 							break
 						else :
@@ -201,11 +200,9 @@ def create_sales_invoice(docname):
 			or default_currency_precision
 			or 2
 		)
-		print(rate_precision,"-----")
 
 		# Fill Items child table
 		order_item_details = properties.get('OrderItem')
-		print(order_item_details,"=====---------------------",len(order_item_details),type(order_item_details))
 		for item in order_item_details:
 			item_rate_as_per_selling_price_list=0
 			item_code = item.get('sap_code')
@@ -224,7 +221,6 @@ def create_sales_invoice(docname):
 				'uom':item_uom
 			})
 			item_price = get_price_list_rate_for(pl_args,item_code)
-			print(item_price,"====item_price",sales_invoice_doc.selling_price_list)
 			if item_price == None:
 				frappe.throw(_("Price not found for item {0} and uom {1} in price list {2}".format(frappe.bold(item_code),frappe.bold(item_uom),frappe.bold(sales_invoice_doc.selling_price_list))),exc=PetPoojaSICreatinoError)
 			# Compliementary case
@@ -241,19 +237,14 @@ def create_sales_invoice(docname):
 					item_row.discount_percentage = 100 * flt(item_row.discount_amount,default_float_precision) / flt(item_rate_as_per_selling_price_list)
 				else:
 					item_row.rate = item_rate_as_per_selling_price_list
-			print(item.get('discount'),"====item.get('discount')",type(item.get('discount')),item_row.rate)
 			item_row.cost_center = cost_center_doc.name
 			item_row.warehouse = cost_center_doc.custom_warehouse
-			print(item_row.discount_amount,"amount")
 			item_row.income_account = company_defaut_income_account
 			item_tax_template = frappe.db.get_value('Item Tax',{"parent":item_code}, 'item_tax_template')
 			item_row.item_tax_template = item_tax_template
 
 		sales_invoice_doc.place_of_supply = place_of_supply
 		sales_invoice_doc.taxes_and_charges = sales_taxes_and_charges
-		print(type(order_details.get('created_on')),"====order_details.get('created_on')")
-		print(type(cstr(order_details.get('orderID'))),"====order_details.get('orderID')")
-		print(type(rest_id),"====rest_id")
 		unique_id = _("{0}_{1}_{2}".format(order_details.get('created_on') ,cstr(order_details.get('orderID')) , rest_id))
 		# cancelled order case
 		if order_details.get('status') == 'Cancelled':
@@ -261,7 +252,6 @@ def create_sales_invoice(docname):
 									filters={"custom_pp_unique_order_id":unique_id},
 									fields=["name"])
 			if len(exists_si)>0:
-				print(exists_si,"exists")
 				exists_si_doc = frappe.get_doc("Sales Invoice",exists_si[0].name)
 				if exists_si_doc.docstatus == 1:
 					exists_si_doc.cancel()
@@ -287,7 +277,6 @@ def create_sales_invoice(docname):
 		sales_invoice_doc.run_method("set_other_charges")
 		sales_invoice_doc.run_method("calculate_taxes_and_totals")
 
-		print(sales_invoice_doc.rounded_total,"====")
 		if payment_type != "Part Payment":
 			payments_row.amount = sales_invoice_doc.rounded_total
 		sales_invoice_doc.save(ignore_permissions=True)
