@@ -54,19 +54,16 @@ def get_conditions(filters):
 def get_data(filters, columns):
     conditions = get_conditions(filters)
     
-    data = frappe.db.sql(
-        f"""
+    query = """
         SELECT
-            ppl.branch AS branch, 
-            ppl.business_date AS business_date, 
-            ppl.invoice_status AS invoice_status, 
+            ppl.branch AS branch,
+            ppl.business_date AS business_date,
+            ppl.invoice_status AS invoice_status,
             1 AS count_log
         FROM `tabPet Pooja Log` AS ppl
-        {conditions}
-        """,
-        filters,
-        as_dict=1
-    )
+        """ + conditions
+
+    data = frappe.db.sql(query, filters, as_dict=1)
 
     return make_report(data, filters, columns)
 

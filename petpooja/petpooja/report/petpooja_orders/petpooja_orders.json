@@ -1,5 +1,6 @@
 {
  "add_total_row": 1,
+ "add_translate_data": 0,
  "columns": [
   {
    "fieldname": "name",
@@ -82,20 +83,22 @@
   }
  ],
  "creation": "2025-01-05 22:23:05.746556",
+ "disable_prepared_report_automation": 0,
  "disabled": 0,
  "docstatus": 0,
  "doctype": "Report",
+ "doctype_to_sync": [],
  "filters": [],
  "idx": 4,
  "is_standard": "Yes",
- "letterhead": null,
- "modified": "2025-01-30 15:50:22.429930",
+ "letter_head": null,
+ "modified": "2026-08-31 15:03:23.816917",
  "modified_by": "Administrator",
  "module": "Petpooja",
  "name": "PetPooja Orders",
  "owner": "Administrator",
  "prepared_report": 0,
- "query": "SELECT \n    name, \n    status,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.orderID'),'\"','')OrderID,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.status'),'\"','')OrderStatus,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.sub_order_type'),'\"','')SubOrderType,    \n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.payment_type'),'\"','')PaymentType,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.custom_payment_type'),'\"','')CustomPaymentType,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.total'),'\"','') TotalAmount,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.order_from'),'\"','') OrderFrom,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.order_type'),'\"','') OrderType,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.created_on'),'\"','') createdOn,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.discount_total'),'\"','') discount_total,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Restaurant.res_name'),'\"','') Branch\nFROM `tabPet Pooja Log`\nwhere creation > '2025-20-01'\norder by createdon desc;",
+ "query": "SELECT \n    name, \n    log_status,\n    invoice_status,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.orderID'),'\"','') OrderID,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.status'),'\"','') OrderStatus,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.sub_order_type'),'\"','') SubOrderType,    \n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.payment_type'),'\"','') PaymentType,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.custom_payment_type'),'\"','') CustomPaymentType,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.total'),'\"','') TotalAmount,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.order_from'),'\"','') OrderFrom,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.order_type'),'\"','') OrderType,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.created_on'),'\"','') createdOn,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Order.discount_total'),'\"','') discount_total,\n    REPLACE(JSON_EXTRACT(data,'$.properties.Restaurant.res_name'),'\"','') Branch\nFROM `tabPet Pooja Log`\nWHERE creation > '2025-01-20'\nORDER BY creation DESC;",
  "ref_doctype": "Pet Pooja Log",
  "report_name": "PetPooja Orders",
  "report_type": "Query Report",
@@ -107,5 +110,6 @@
    "role": "Sales Manager"
   }
  ],
+ "snapshot_report": 0,
  "timeout": 0
 }
