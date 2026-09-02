@@ -40,7 +40,7 @@ The integration works as a one-way sync: **PetPooja → ERPNext**.
 
 1. **Order placed** on PetPooja (POS terminal, Zomato, or Swiggy) and marked created/updated/cancelled.
 2. **Webhook call** — PetPooja POSTs the order payload to `/api/method/petpooja.petpooja_endpoint.order_created`.
-3. **Authentication** — the request is validated against the shared secret configured in *Petpooja Settings*; on success, the request runs as the configured *Creation User*.
+3. **Authentication** — the endpoint accepts guest requests but requires the shared secret from *Petpooja Settings* to be echoed back as a `token` field in the payload (checked with a constant-time comparison); the token is stripped before the payload is logged. On success, the request runs as the configured **Creation User** — ERPNext performs some permission checks (e.g. reading the receivable Account) that aren't covered by `ignore_permissions=True`, so a real user context is still required.
 4. **Log creation** — the raw payload is queued and stored as a **Pet Pooja Log**, with the restaurant ID, order ID, and computed business date resolved immediately.
 5. **Sales Invoice creation** — on log insert, a background job resolves the Cost Center (branch), customer, price list, item rates, taxes, and mode(s) of payment, then creates and submits the Sales Invoice.
 6. **Status tracking** — the Pet Pooja Log is updated with `invoice_status` (`Created`, `Cancelled`, `Duplicate`, or `Error`) and links back to the Sales Invoice; errors are captured with the full traceback for troubleshooting.
@@ -51,7 +51,7 @@ The integration works as a one-way sync: **PetPooja → ERPNext**.
 Before going live, configure the following in ERPNext:
 
 - **Petpooja Settings** (single doctype):
-  - Check **Enable** and set the **Creation User** — a user with permission to create Customers, Items, and Sales Invoices (this is the user under which the webhook operations run).
+  - Check **Enable** and set the **Creation User** — use a dedicated, least-privilege user (Accounts User/Manager + Stock/Sales roles as needed) rather than Administrator, since this is the user under which webhook operations run.
   - Set **Default Zomato Customer** and **Default Swiggy Customer**.
   - Set **Place of Supply** (default GST state code).
   - Optionally configure the **PP vs ERPNext Mode of Payment Mapping** table as a fallback mapping for custom/"Other" payment types.

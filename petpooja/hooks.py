@@ -240,7 +240,8 @@ app_license = "mit"
 # Authentication and authorization
 # --------------------------------
 
-auth_hooks = ["petpooja.petpooja_endpoint.validate_request"]
+# order_created is allow_guest with an inline token check (see petpooja_endpoint.py),
+# so no global auth_hook / frappe.set_user impersonation is needed.
 
 # Automatically update python controller files with type annotations for this app.
 # export_python_type_annotations = True

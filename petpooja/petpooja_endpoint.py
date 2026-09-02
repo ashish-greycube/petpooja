@@ -1,5 +1,3 @@
-import base64
-import hashlib
 import hmac
 import json
 from http import HTTPStatus
@@ -10,34 +8,48 @@ from frappe import _
 from werkzeug.wrappers import Response
 from frappe.utils import getdate, cstr, add_to_date, get_time
 
-ALLOWED_PATHS = ["/api/method/petpooja.petpooja_endpoint.order_created"]
 
-@frappe.whitelist()
-def validate_request():
-	if frappe.request and frappe.request.path and frappe.request.path in ALLOWED_PATHS:
-		if frappe.request.data:
-			request_data = json.loads(frappe.request.data)
-	else:
-		return
-	    # it is not use..so what to do
-		# raise frappe.PermissionError
+def _token_is_valid(token):
+	"""Constant-time check of the shared secret PetPooja sends in the payload.
+
+	PetPooja does not compute an HMAC signature over the request body - it just
+	echoes the shared secret back as a plain `token` field - so there is nothing
+	to sign/verify beyond this. hmac.compare_digest still protects the comparison
+	itself from timing attacks.
+	"""
+	if not token or not isinstance(token, str):
+		return False
 	petpooja_settings = frappe.get_cached_doc('Petpooja Settings', 'Petpooja Settings')
-	petpooja_settings_secret=petpooja_settings.secret.encode("utf8")
-	payload_token=request_data.get('token').encode("utf8")
-	if payload_token and petpooja_settings_secret==payload_token:
-		frappe.set_user(petpooja_settings.creation_user)
-	else:
-		raise frappe.AuthenticationError
+	secret = (petpooja_settings.secret or "").encode("utf8")
+	return hmac.compare_digest(secret, token.encode("utf8"))
 
 
-@frappe.whitelist(allow_guest=False, methods=["POST"])
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 def order_created(*args, **kwargs):
-	if frappe.request and frappe.request.data:
-		request_data = json.loads(frappe.request.data)
-		frappe.enqueue(create_petpooja_log, queue="long",job_name="petpooja_log",request_data=request_data)
-		return Response(status=HTTPStatus.OK)
-	else:
+	if not (frappe.request and frappe.request.data):
 		return Response(response=_("Event not supported"), status=HTTPStatus.BAD_REQUEST)
+
+	try:
+		request_data = json.loads(frappe.request.data)
+	except ValueError:
+		return Response(response=_("Invalid JSON body"), status=HTTPStatus.BAD_REQUEST)
+
+	if not isinstance(request_data, dict):
+		return Response(response=_("Invalid JSON body"), status=HTTPStatus.BAD_REQUEST)
+
+	if not _token_is_valid(request_data.pop('token', None)):
+		return Response(response=_("Invalid or missing token"), status=HTTPStatus.UNAUTHORIZED)
+
+	# ERPNext performs some standalone permission checks (e.g. Account read access
+	# in get_party_account) that are not covered by ignore_permissions=True on the
+	# Sales Invoice, so the enqueued job still needs to run as a real user. Only do
+	# this after the token has been verified, and only for this endpoint - the old
+	# approach ran this impersonation via a global auth_hook on every API request.
+	petpooja_settings = frappe.get_cached_doc('Petpooja Settings', 'Petpooja Settings')
+	frappe.set_user(petpooja_settings.creation_user)
+
+	frappe.enqueue(create_petpooja_log, queue="long", job_name="petpooja_log", request_data=request_data)
+	return Response(status=HTTPStatus.OK)
 
 
 def create_petpooja_log(request_data):
